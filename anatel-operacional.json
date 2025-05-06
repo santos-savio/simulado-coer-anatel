@@ -1394,7 +1394,7 @@
                 "texto": "nunca falar mal de uma repetidora quando estiver operando em outra, mesmo que esta não esteja de acordo com suas necessidades"
             },
             {
-                "correta": false,
+                "correta": true,
                 "texto": "todas estão corretas"
             }
         ]
