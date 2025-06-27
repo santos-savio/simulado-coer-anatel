@@ -3,8 +3,6 @@ import json
 import random
 
 app = Flask(__name__)
-# with open('provas/anatel-operacional.json', encoding='utf-8') as f:
-#     QUESTIONS = json.load(f)
 
 @app.route('/')
 def index():
