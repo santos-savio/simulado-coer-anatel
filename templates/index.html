@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Simulado COER</title>
+        <!-- Importa o Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        
+        <!-- CSS customizado -->
+        <style>
+            body {
+                background-color: #f4f6f8;
+                padding: 2rem;
+            }
+
+            .main-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .card {
+                padding: 2rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: white;
+            }
+
+            .title {
+                margin-bottom: 0.5rem;
+            }
+
+            .subtitle {
+                margin-bottom: 1rem;
+                color: #4a4a4a;
+            }
+
+            .buttons a {
+                margin-bottom: 0.75rem;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+    <div class="main-container">
+        <div class="card">
+            <div class="content has-text-centered">
+                <p class="title is-3">Simulado COER</p>
+
+
+        <p class="subtitle is-5"><strong>Certificado de Operador de Estação de Radioamador</strong></p>
+                <p>
+                    Provas retiradas do site da
+                    <a href="https://www.gov.br/anatel/pt-br/regulado/outorga/radioamador-e-radio-cidadao/habilitacao-do-radioamador" target="_blank">
+                        Anatel
+                    </a>
+                </p>
+            </div>
+            <div class="content">
+                <p class="has-text-centered has-text-weight-semibold">Selecione uma prova:</p>
+                <div class="buttons is-centered is-flex-direction-column">
+                    <a href="/prova-operacional" class="button is-primary is-medium">
+                        Técnica e Ética Operacional
+                    </a>
+                    <a href="/prova-legislacao" class="button is-primary is-medium">
+                        Legislação de Telecomunicações
+                    </a>
+                    <a href="/prova-eletronica" class="button is-primary is-medium">
+                        Eletrônica e Eletricidade
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
