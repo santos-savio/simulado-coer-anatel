@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Correção da Prova</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    .certa {
+      background-color: #c8e6c9;
+    }
+    .errada {
+      background-color: #ffcdd2;
+    }
+    li {
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    .bloco-questao {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      padding: 100px;
+      border-radius: 5px;
+    }
+
+      .numero-questao {
+    background: #1976d2;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 8px;
+    margin-top: 24px;
+    display: inline-block;
+  }
+  </style>
+</head>
+<body onload="renderizarCorrecao()">
+  <h1>Correção da Prova</h1>
+  <div id="correcao"></div>
+
+  <script>
+    function renderizarCorrecao() {
+      const questoes = JSON.parse(localStorage.getItem('questoes')) || [];
+      const respostas = JSON.parse(localStorage.getItem('respostas_usuario')) || [];
+
+      const container = document.getElementById('correcao');
+      if (questoes.length === 0 || respostas.length === 0) {
+        container.innerHTML = "<p>Dados da prova não encontrados.</p>";
+        return;
+      }
+
+      questoes.forEach((q, i) => {
+        const bloco = document.createElement('div');
+        bloco.id = `questao-${q.numero}`;
+        bloco.classList.add('bloco-questao'); // para estilização via CSS
+        bloco.innerHTML = `<h2>Questão ${q.numero}</h2><p>${q.enunciado}</p>`;
+
+        const lista = document.createElement('ul');
+
+        q.alternativas.forEach((alt, idx) => {
+          const li = document.createElement('li');
+          li.textContent = alt.texto;
+
+          if (alt.correta) {
+            li.classList.add('certa'); // ✅ Resposta correta
+          } else if (respostas[i] === idx && !alt.correta) {
+            li.classList.add('errada'); // ❌ Usuário marcou errado
+          }
+
+          lista.appendChild(li);
+        });
+
+        bloco.appendChild(lista);
+        container.appendChild(bloco);
+      });
+    }
+  </script>
+</body>
+</html>
