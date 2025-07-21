@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let score = 0;
   let timerInterval;
   let timeRemaining = 30 * 60;
+  let respostasUsuario = [];
 
   const appEl = document.getElementById('app');
   const questionEl = document.getElementById('question');
@@ -39,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     questionEl.innerText = `${current + 1}. ${q.enunciado}`;
     optionsEl.innerHTML = '';
 
-    q.alternativas.forEach((alt) => {
+    q.alternativas.forEach((alt, idx) => {
       const btn = document.createElement('div');
       btn.className = 'option';
       btn.innerText = alt.texto;
-      btn.onclick = () => handleAnswer(btn, alt.correta);
+      btn.onclick = () => handleAnswer(btn, alt.correta, idx); // Passe idx
       optionsEl.appendChild(btn);
     });
 
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgress();
   }
 
-  function handleAnswer(selected, correct) {
+  function handleAnswer(selected, correct, idx) {
     const options = document.querySelectorAll('.option');
     options.forEach(btn => {
       btn.onclick = null;
@@ -59,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isCorrect) btn.classList.add('correct');
       else btn.classList.add('wrong');
     });
+
+    respostasUsuario[current] = idx; // Salve a resposta do usuário
 
     if (correct) score++;
     nextBtn.style.display = 'block';
@@ -78,15 +81,68 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(timerInterval);
     document.title = '✅ Simulado Finalizado';
     appEl.innerHTML = `
+      <style>
+        .certa { background-color: #c8e6c9; }
+        .errada { background-color: #ffcdd2; }
+        li { margin: 5px 0; padding: 5px; border-radius: 4px; }
+      </style>
       <div class="has-text-centered">
         <h2 class="title is-3">Simulado concluído!</h2>
         <p><strong>Acertos:</strong> ${score} de ${questions.length}</p>
         <p><strong>Nota:</strong> ${(score / questions.length * 10).toFixed(2)}</p>
         <button class="button is-warning mt-4" onclick="window.location.reload()">Reiniciar</button>
         <button class="button is-warning mt-4" onclick="window.location.href = '/'">Voltar para o início</button>
+        <p> <button class="button is-info mt-4" onclick="mostrarCorrecao()">Ver correção</button> </p>
+        <div id="correcao"></div> <!-- Adicione este elemento -->
       </div>
     `;
+
+    localStorage.setItem('questoes', JSON.stringify(questions)); // Salve as questões
+    localStorage.setItem('respostas_usuario', JSON.stringify(respostasUsuario)); // Salve as respostas
   }
+
+  function mostrarCorrecao() {
+    const questoes = JSON.parse(localStorage.getItem('questoes')) || [];
+    const respostas = JSON.parse(localStorage.getItem('respostas_usuario')) || [];
+
+    const container = document.getElementById('correcao');
+    container.innerHTML = ''; // limpa correções anteriores, se houver
+
+    if (questoes.length === 0 || respostas.length === 0) {
+      container.innerHTML = "<p>Dados da prova não encontrados.</p>";
+      return;
+    }
+
+    questoes.forEach((q, i) => {
+      const bloco = document.createElement('div');
+      bloco.classList.add('bloco-questao'); // classe para estilização
+      bloco.innerHTML = `<div class="numero-questao">Questão ${q.numero}</div><p>${q.enunciado}</p>`;
+
+      const lista = document.createElement('ul');
+
+      q.alternativas.forEach((alt, idx) => {
+        const li = document.createElement('li');
+        li.textContent = alt.texto;
+
+        if (alt.correta) {
+          li.classList.add('certa'); // resposta correta
+        } else if (respostas[i] === idx && !alt.correta) {
+          li.classList.add('errada'); // resposta errada marcada
+        }
+
+        lista.appendChild(li);
+      });
+
+      bloco.appendChild(lista);
+      container.appendChild(bloco); 
+    });
+
+    // opcional: rolar até o bloco de correção
+    container.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Torne a função acessível globalmente
+  window.mostrarCorrecao = mostrarCorrecao;
 
   function updateProgress() {
     progressBar.value = current + 1;
