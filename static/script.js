@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p><strong>Acertos:</strong> ${score} de ${questions.length}</p>
         <p><strong>Nota:</strong> ${(score / questions.length * 10).toFixed(2)}</p>
         <button class="button is-warning mt-4" onclick="window.location.reload()">Reiniciar</button>
+        <button class="button is-warning mt-4" onclick="window.location.href = '/'">Voltar para o início</button>
       </div>
     `;
   }
