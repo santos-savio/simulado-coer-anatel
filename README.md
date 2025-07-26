@@ -1,3 +1,4 @@
 # Simulado COER - Anatel
-## Prova para obtenção do Certificado de Operador de Estação de Radioamador
-Utilizando o Framework Flask
+## Simulado da prova para obtenção do Certificado de Operador de Estação de Radioamador
+Utilizando questões reais
+Acesse em [savio.dev.br/simulado-coer](https://savio.dev.br/simulado-coer)
