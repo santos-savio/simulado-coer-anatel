@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerEl = document.getElementById('timer');
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
-    timerEl.innerText = `⏳ Tempo restante: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-    document.title = `⏰ ${minutes}:${seconds.toString().padStart(2, '0')} - Simulado`;
+    timerEl.innerText = `\u23F3 Tempo restante: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    document.title = `\u23F0 ${minutes}:${seconds.toString().padStart(2, '0')} - Simulado`;
   }
 
   function insertTimerAndExitBtn() {
