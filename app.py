@@ -51,4 +51,4 @@ def api_questions():
     return jsonify(questions[:20])  # Envia só as 20 primeiras
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5053, debug=True)
