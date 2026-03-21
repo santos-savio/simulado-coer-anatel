@@ -183,14 +183,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const exitBtn = document.createElement('button');
     exitBtn.className = 'button is-danger is-small';
     exitBtn.innerText = 'Sair da prova';
-    exitBtn.onclick = () => {
-      if (confirm("Tem certeza que deseja sair da prova? Seu progresso será perdido.")) {
-        window.location.href = "/"; // ou outro destino
-      }
-    };
+    exitBtn.onclick = () => openExitModal();
 
     controlDiv.appendChild(timerDiv);
     controlDiv.appendChild(exitBtn);
     appEl.insertBefore(controlDiv, questionEl);
+  }
+
+  function openExitModal() {
+    const modal = document.getElementById('exitModal');
+    modal.classList.add('is-active');
+
+    document.getElementById('confirmExit').onclick = () => {
+      window.location.href = "/";
+    };
+
+    document.getElementById('cancelExit').onclick = () => closeExitModal();
+    
+    const modalBg = modal.querySelector('.modal-background');
+    modalBg.onclick = () => closeExitModal();
+  }
+
+  function closeExitModal() {
+    const modal = document.getElementById('exitModal');
+    modal.classList.remove('is-active');
   }
 });

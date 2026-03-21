@@ -104,5 +104,24 @@
 
     <script src="/static/script.js"></script>
   </div>
+
+  <!-- Modal de confirmação para sair da prova -->
+  <div id="exitModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Confirmar saída</p>
+      </header>
+      <section class="modal-card-body">
+        <p>Tem certeza que deseja sair da prova?</p>
+        <p class="has-text-weight-semibold mt-2">Seu progresso será perdido.</p>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-danger" id="confirmExit">Sim, sair da prova</button>
+        <button class="button" id="cancelExit">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+
 </body>
 </html>
