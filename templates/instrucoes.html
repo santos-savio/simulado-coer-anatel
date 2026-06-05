@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Como obter o COER — Simulado COER</title>
+    <meta name="description" content="Guia completo para obter o COER Classe C, B ou A da ANATEL: passo a passo, estrutura da prova, privilégios e processo de upgrade de classe.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body {
+            background-color: #f4f6f8;
+            padding: 2rem 1rem;
+        }
+        .page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .content-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: #3273dc;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+        }
+        .step-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #363636;
+            margin-bottom: 0.75rem;
+        }
+        .step-block {
+            border-left: 3px solid #3273dc;
+            padding-left: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .upgrade-block {
+            border-left: 3px solid #48c774;
+            padding-left: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .upgrade-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #257953;
+            margin-bottom: 0.75rem;
+        }
+        .upgrade-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            background-color: #48c774;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.6rem;
+        }
+        @media (max-width: 600px) {
+            .content-card { padding: 1.25rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+
+    <!-- Voltar -->
+    <div class="mb-4">
+        <a href="/" class="button is-light is-small">
+            ← Voltar ao Simulado
+        </a>
+    </div>
+
+    <div class="content-card">
+        <h1 class="title is-4">Como obter o COER</h1>
+        <p class="subtitle is-6 mb-4" style="color:#6b6b6b; margin-top: 0;">
+            Certificado de Operador de Estação de Radioamador &mdash; ANATEL
+        </p>
+
+        <!-- Fluxo visual -->
+        <div class="notification is-light mb-5" style="background:#f0f4ff; border-left:4px solid #3273dc; padding:1rem 1.25rem;">
+            <p class="has-text-weight-semibold mb-2" style="color:#3273dc;">Fluxo resumido</p>
+            <div style="font-family:monospace; font-size:0.85rem; color:#444; line-height:1.8;">
+                Conta gov.br &rarr; Inscrição SEC &rarr; Prova Online &rarr; Emissão COER &rarr; Outorga (Mosaico) &rarr; Licença de Estação
+            </div>
+        </div>
+
+        <!-- ── PASSO A PASSO ── -->
+        <h2 class="title is-5 mt-5 mb-4">Passo a passo — Classe C</h2>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">1</span> Criar conta no Gov.br</div>
+            <div class="content">
+                <ul>
+                    <li>Acesse <a href="https://www.gov.br" target="_blank">gov.br</a> e crie uma conta, caso não tenha.</li>
+                    <li>Nível mínimo exigido: <strong>Prata</strong> (validação por CPF ou banco).</li>
+                    <li>Essa conta é usada para acessar todos os sistemas da ANATEL.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">2</span> Inscrição no Sistema SEC</div>
+            <div class="content">
+                <ol>
+                    <li>Acesse o <a href="https://sistemas.anatel.gov.br/sec" target="_blank">Sistema SEC</a> e faça login com sua conta Gov.br.</li>
+                    <li>Navegue em <strong>Menu Principal → Prova → Incluir</strong>.</li>
+                    <li>Selecione a classe <strong>C</strong> e escolha uma data disponível no calendário.</li>
+                    <li>A inscrição é <strong>gratuita</strong>.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">3</span> Preparação para a Prova</div>
+            <div class="content">
+                <p><strong>Matérias cobradas na Classe C:</strong></p>
+                <ol>
+                    <li>Técnica e Ética Operacional</li>
+                    <li>Legislação de Telecomunicações</li>
+                    <li>Conhecimentos Básicos de Eletrônica e Eletricidade</li>
+                </ol>
+
+                <table class="table is-bordered is-striped is-fullwidth mt-3" style="font-size:0.9rem;">
+                    <thead>
+                        <tr><th>Item</th><th>Detalhe</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Provas</td><td>3 (uma por disciplina)</td></tr>
+                        <tr><td>Questões por prova</td><td>15 questões</td></tr>
+                        <tr><td>Mínimo para aprovação</td><td><strong>8 acertos</strong> por prova</td></tr>
+                        <tr><td>Tempo por prova</td><td>20 minutos</td></tr>
+                        <tr><td>Formato</td><td>Múltipla escolha</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="notification is-warning is-light py-2 px-3 mt-2" style="font-size:0.9rem;">
+                    Reprovação em <strong>qualquer uma</strong> das 3 disciplinas implica reprovação geral.
+                </div>
+
+                <p class="mt-3"><strong>Onde estudar:</strong></p>
+                <ul>
+                    <li><strong>Este simulado</strong> — pratique as questões oficiais antes da prova</li>
+                    <li><a href="https://www.labre.org.br/cursos-e-apostilas/" target="_blank">LABRE — Cursos e Apostilas</a> (Atualmente em construção)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">4</span> Realizar a Prova Online</div>
+            <div class="content">
+                <ul>
+                    <li>Prova aplicada <strong>100% online</strong> via videoconferência no <strong>Microsoft Teams</strong>.</li>
+                    <li>Participação individual, com fiscalização em tempo real por avaliador da ANATEL.</li>
+                    <li>Duração máxima: <strong>2 horas</strong> (inclui orientações + as 3 provas).</li>
+                    <li>Tenha documento de identidade com foto em mãos.</li>
+                    <li>Ambiente silencioso, boa iluminação e câmera funcionando são obrigatórios.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">5</span> Receber o COER</div>
+            <div class="content">
+                <ul>
+                    <li>Aprovado nas 3 disciplinas → COER emitido automaticamente.</li>
+                    <li>Certificado disponível para download no próprio SEC.</li>
+                    <li><strong>Não há taxa</strong> para emissão do COER.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">6</span> Obter a Outorga (SIR)</div>
+            <div class="content">
+                <div class="notification is-info is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                    O COER <strong>habilita</strong>, mas não autoriza operação. É preciso solicitar a <strong>Outorga de Serviço de Interesse Restrito (SIR)</strong> — apenas na primeira vez.
+                </div>
+                <div class="notification is-warning is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                    <strong>Pré-requisito:</strong> antes de prosseguir, registre-se no <strong>SEI (Sistema Eletrônico de Informações)</strong> da ANATEL e configure seus direitos de acesso. O MMAR depende do SEI para funcionar.
+                </div>
+                <ol>
+                    <li>Acesse o <strong>SEI</strong> e protocole o requerimento de Outorga — Serviço Radioamador (Serviço 302).</li>
+                    <li>Anexe cópia do documento de identidade com foto e comprovante de residência.</li>
+                    <li>Aguarde e-mail da ANATEL confirmando a concessão da outorga.</li>
+                    <li>Retorne ao SEI e confirme o recebimento da <strong>intimação eletrônica</strong>.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="step-block">
+            <div class="step-title"><span class="step-number">7</span> Licenciar a Estação pelo MMAR</div>
+            <div class="content">
+                <div class="notification is-primary is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                    <strong>Novo em 2026 — Sistema MMAR:</strong> o licenciamento agora é feito pelo módulo <strong>MMAR – Licenciamento Radioamador</strong>, dentro do Mosaico. Ele substituiu o antigo SCRA e unifica tudo em um único ambiente digital.
+                </div>
+                <ol>
+                    <li>Acesse o <a href="https://sistemas.anatel.gov.br/se" target="_blank">Mosaico (MMAR)</a> com sua conta Gov.br.</li>
+                    <li>Solicite a licença de estação escolhendo o tipo: <strong>fixa, móvel, repetidora, terrena ou espacial</strong> (limitado pela sua classe).</li>
+                    <li>Informe as <strong>coordenadas geográficas</strong> (latitude e longitude) da estação — <strong>obrigatório</strong> para estações fixas desde 2026.</li>
+                    <li>Gere e pague os boletos diretamente no MMAR (sem precisar do número FISTEL):
+                        <ul>
+                            <li><strong>PPDUR</strong> — Preço Público pelo Direito de Uso de Radiofrequência</li>
+                            <li><strong>TFI</strong> — Taxa de Fiscalização de Instalação</li>
+                        </ul>
+                    </li>
+                    <li>Pague dentro do prazo — o não pagamento arquiva o pedido automaticamente.</li>
+                    <li>Emita e imprima a <strong>Licença de Estação</strong> pelo próprio MMAR. A licença agora tem <strong>QR Code de autenticação</strong> no lugar de assinatura manual.</li>
+                    <li>O <strong>indicativo de chamada</strong> (ex.: <code>PY5XXX</code>) é atribuído automaticamente pela ANATEL conforme a região.</li>
+                </ol>
+
+                <p class="mt-3"><strong>Taxa anual (renovação):</strong></p>
+                <ul>
+                    <li>Pague a <strong>TFF</strong> (Taxa de Fiscalização de Funcionamento) até <strong>31 de março</strong> de cada ano.</li>
+                    <li>Também incide a <strong>CFRP</strong> (Contribuição para o Fomento da Radiodifusão Pública).</li>
+                    <li>Ambas são geradas e pagas diretamente no MMAR.</li>
+                </ul>
+
+                <div class="notification is-light py-2 px-3 mt-3" style="font-size:0.9rem;">
+                    <strong>Bônus — IARP:</strong> se deseja operar no exterior, solicite pelo MMAR o <strong>Certificado IARP</strong> (International Amateur Radio Permit). É gerado automaticamente em inglês, espanhol ou francês.
+                </div>
+            </div>
+        </div>
+
+        <!-- ── COMPARATIVO ── -->
+        <hr>
+        <h2 class="title is-5 mt-5 mb-3">Comparativo de Classes</h2>
+
+        <div class="notification is-success is-light py-2 px-3 mb-4" style="font-size:0.9rem;">
+            <strong>Novidade (Resolução 777/2025):</strong> o Código Morse <strong>não é mais obrigatório</strong> para nenhuma classe. Continua permitido operar em CW, mas deixou de ser barreira de progressão.
+        </div>
+
+        <p class="has-text-weight-semibold mb-2">Estrutura da prova por classe</p>
+        <table class="table is-bordered is-striped is-fullwidth mb-4" style="font-size:0.9rem;">
+            <thead>
+                <tr>
+                    <th>Classe</th>
+                    <th>Questões/prova</th>
+                    <th>Mín. acertos</th>
+                    <th>Tempo/prova</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tag is-primary">C</span></td>
+                    <td>15</td><td>8</td><td>20 min</td>
+                </tr>
+                <tr>
+                    <td><span class="tag is-link">B</span></td>
+                    <td>20</td><td>11</td><td>30 min</td>
+                </tr>
+                <tr>
+                    <td><span class="tag is-danger">A</span></td>
+                    <td>30</td><td>16</td><td>40 min</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="has-text-weight-semibold mb-2">Privilégios de operação</p>
+        <table class="table is-bordered is-striped is-fullwidth mb-5" style="font-size:0.9rem;">
+            <thead>
+                <tr><th>Classe</th><th>Bandas disponíveis</th><th>Potência máxima</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tag is-primary">C</span></td>
+                    <td>VHF / UHF (regional)</td>
+                    <td>100 W RMS</td>
+                </tr>
+                <tr>
+                    <td><span class="tag is-link">B</span></td>
+                    <td>HF + VHF + UHF (internacional)</td>
+                    <td>1.000 W RMS</td>
+                </tr>
+                <tr>
+                    <td><span class="tag is-danger">A</span></td>
+                    <td>Todas as faixas do radioamadorismo</td>
+                    <td>1.500 W RMS</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ── UPGRADE ── -->
+        <hr>
+        <h2 class="title is-5 mt-5 mb-4">Upgrade de Classe</h2>
+
+        <div class="upgrade-block">
+            <div class="upgrade-title">
+                <span class="upgrade-badge">C → B</span> Upgrade para Classe B
+            </div>
+            <div class="content">
+                <p>O processo é idêntico ao da Classe C, selecionando <strong>Classe B</strong> na inscrição do SEC.</p>
+                <ol>
+                    <li>Acesse o Sistema SEC e inscreva-se para a <strong>Classe B</strong>.</li>
+                    <li>Estude as 4 disciplinas (as 3 da Classe C + <strong>Eletrônica Avançada e Eletricidade</strong>).</li>
+                    <li>Realize a prova: 4 provas de 20 questões, mínimo 11 acertos cada.</li>
+                    <li>Com aprovação, o COER Classe B é emitido — substitui o C.</li>
+                    <li>Atualize a classe na licença de estação pelo <strong>MMAR</strong>.</li>
+                </ol>
+                <div class="notification is-light py-2 px-3" style="font-size:0.9rem;">
+                    Não é necessário refazer as disciplinas aprovadas na Classe C.
+                </div>
+            </div>
+        </div>
+
+        <div class="upgrade-block">
+            <div class="upgrade-title">
+                <span class="upgrade-badge">B → A</span> Upgrade para Classe A
+            </div>
+            <div class="content">
+                <ol>
+                    <li>Acesse o Sistema SEC e inscreva-se para a <strong>Classe A</strong>.</li>
+                    <li>A prova tem 30 questões por disciplina (mínimo 16 acertos, 40 min cada).</li>
+                    <li>As disciplinas são as mesmas da Classe B, com <strong>nível técnico mais elevado</strong>.</li>
+                    <li>Aprovado → COER Classe A emitido.</li>
+                    <li>Atualize a classe na licença de estação pelo <strong>MMAR</strong>.</li>
+                </ol>
+                <div class="notification is-light py-2 px-3" style="font-size:0.9rem;">
+                    Classe A também habilita ser <strong>responsável técnico</strong> de estações de entidades (clubes, associações).
+                </div>
+            </div>
+        </div>
+
+        <!-- ── FAQ ── -->
+        <hr>
+        <h2 class="title is-5 mt-5 mb-4">Perguntas Frequentes</h2>
+
+        <div class="content">
+            <p><strong>Preciso ser filiado à LABRE?</strong><br>
+            Não. A filiação é opcional, mas recomendada para suporte e comunidade.</p>
+
+            <p><strong>Posso reprovar e tentar novamente?</strong><br>
+            Sim. Em caso de reprovação, basta reagendar no SEC assim que houver nova data disponível.</p>
+
+            <p><strong>O COER expira?</strong><br>
+            Não. O COER tem validade indeterminada. A Licença de Estação precisa de renovação anual via pagamento da TFF (até 31 de março de cada ano).</p>
+
+            <p><strong>Menores de idade podem tirar?</strong><br>
+            Sim, com autorização dos responsáveis legais. A partir de 10 anos para a Classe C. No MMAR, é necessário designar um responsável legal com procuração eletrônica.</p>
+
+            <p><strong>O que mudou com o MMAR?</strong><br>
+            O MMAR substituiu o antigo SCRA (Sistema de Controle do Serviço Radioamador) em março de 2026. Agora tudo é feito em um único lugar: solicitação, acompanhamento, pagamento de boletos (sem precisar do FISTEL) e emissão da licença. A licença passou a usar QR Code no lugar de assinatura manual, e coordenadas geográficas tornaram-se obrigatórias para estações fixas.</p>
+        </div>
+
+        <!-- ── LINKS ── -->
+        <hr>
+        <h2 class="title is-5 mt-5 mb-3">Links Oficiais</h2>
+        <div class="content">
+            <ul>
+                <li><a href="https://www.gov.br/anatel/pt-br/regulado/outorga/radioamador-e-radio-cidadao/habilitacao-do-radioamador" target="_blank">Habilitação do Radioamador — ANATEL</a></li>
+                <li><a href="https://www.gov.br/anatel/pt-br/regulado/outorga/radioamador-e-radio-cidadao/licenciamento-de-estacoes-do-radioamador" target="_blank">Licenciamento de Estações (MMAR) — ANATEL</a></li>
+                <li><a href="https://sistemas.anatel.gov.br/sec" target="_blank">Sistema SEC (inscrição e prova)</a></li>
+                <li><a href="https://sistemas.anatel.gov.br/se" target="_blank">Mosaico / MMAR (licenciamento de estação)</a></li>
+                <li><a href="https://www.labre.org.br/anatel-lanca-novo-sistema-para-licenciamento-de-estacoes-de-radioamador/" target="_blank">LABRE — Novo Sistema MMAR</a></li>
+                <li><a href="https://www.radioamador.com/coer/" target="_blank">Portal Radioamador — COER</a></li>
+            </ul>
+        </div>
+
+    </div><!-- /content-card -->
+
+    <p class="has-text-centered mt-4" style="font-size:0.85rem; color:#888;">
+        Feito por <a href="https://savio.dev.br/" target="_blank" style="color:#2e5adf;">Savio Santos</a>
+    </p>
+
+</div><!-- /page-container -->
+</body>
+</html>

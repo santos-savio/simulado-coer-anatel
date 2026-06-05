@@ -52,6 +52,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/instrucoes')
+def instrucoes():
+    return render_template('instrucoes.html')
+
+
 @app.route('/prova-operacional')
 def prova_operacional():
     carregar_prova('provas/anatel-operacional.json')
