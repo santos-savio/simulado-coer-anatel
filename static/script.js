@@ -77,8 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function logAcesso(payload) {
+    navigator.sendBeacon('/api/log-acesso', new Blob(
+      [JSON.stringify({ prova: window.PROVA_NOME || '', ...payload })],
+      { type: 'application/json' }
+    ));
+  }
+
   function finishQuiz() {
     clearInterval(timerInterval);
+    const nota = parseFloat((score / questions.length * 10).toFixed(2));
+    logAcesso({ concluido: true, acertos: score, total: questions.length, nota });
     document.title = '✅ Simulado Finalizado';
     appEl.innerHTML = `
       <style>
@@ -195,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.add('is-active');
 
     document.getElementById('confirmExit').onclick = () => {
+      logAcesso({ concluido: false, questao_abandono: current + 1 });
       window.location.href = "/";
     };
 
