@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, request
 import json
 import random
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 
 app = Flask(__name__)
 QUESTIONS = []
@@ -89,7 +89,7 @@ def log_acesso():
            (timestamp, prova, concluido, acertos, total, nota, questao_abandono)
            VALUES (?, ?, ?, ?, ?, ?, ?)''',
         (
-            datetime.utcnow().isoformat(),
+            datetime.now(timezone.utc).isoformat(),
             data.get('prova', ''),
             1 if data.get('concluido') else 0,
             data.get('acertos'),
