@@ -95,7 +95,8 @@
                 <p class="mt-3"><strong>O que registramos ao usar o simulado:</strong></p>
                 <ul>
                     <li>A prova selecionada</li>
-                    <li>Resultado (acertos e nota), se você concluir a prova</li>
+                    <li>Resultado final (acertos e nota), se você concluir</li>
+                    <li>Acerto ou erro de cada questão respondida, para identificar quais são as mais difíceis</li>
                     <li>Número da questão em que estava ao sair, se não concluir</li>
                 </ul>
 
@@ -103,7 +104,7 @@
                 <ul>
                     <li>Não coletamos nome, e-mail ou qualquer dado pessoal identificável</li>
                     <li>Não compartilhamos dados com terceiros</li>
-                    <li>Os registros são usados apenas para fins estatísticos</li>
+                    <li>Os registros são usados exclusivamente para estatísticas de desempenho do simulado</li>
                 </ul>
 
                 <p class="mt-3"><strong>Aviso:</strong> As questões são baseadas no material oficial disponibilizado pela Anatel. Este site não tem vínculo oficial com a Anatel e não garante a atualidade das questões.</p>
@@ -119,7 +120,7 @@
         var _provaDestino = '';
 
         document.addEventListener('DOMContentLoaded', function () {
-            if (!sessionStorage.getItem('termos_aceitos')) {
+            if (!sessionStorage.getItem('termos_aceitos_20260604')) {
                 document.getElementById('termosModal').classList.add('is-active');
             }
             document.querySelector('#termosModal .modal-background')
@@ -127,7 +128,7 @@
         });
 
         function iniciarProva(url) {
-            if (!sessionStorage.getItem('termos_aceitos')) {
+            if (!sessionStorage.getItem('termos_aceitos_20260604')) {
                 _provaDestino = url;
                 document.getElementById('termosModal').classList.add('is-active');
                 return;
@@ -136,7 +137,7 @@
         }
 
         function aceitarTermos() {
-            sessionStorage.setItem('termos_aceitos', '1');
+            sessionStorage.setItem('termos_aceitos_20260604', '1');
             document.getElementById('termosModal').classList.remove('is-active');
             if (_provaDestino) {
                 window.location.href = _provaDestino;

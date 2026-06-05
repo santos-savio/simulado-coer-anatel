@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerInterval;
   let timeRemaining = 30 * 60;
   let respostasUsuario = [];
+  let logEnviado = false;
 
   const appEl = document.getElementById('app');
   const questionEl = document.getElementById('question');
@@ -77,7 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function buildRespostas(limit) {
+    return questions.slice(0, limit).map((q, i) => ({
+      numero_questao: q.numero,
+      acertou: respostasUsuario[i] !== undefined
+        ? q.alternativas[respostasUsuario[i]].correta
+        : false
+    }));
+  }
+
   function logAcesso(payload) {
+    if (logEnviado) return;
+    logEnviado = true;
     navigator.sendBeacon('/api/log-acesso', new Blob(
       [JSON.stringify({ prova: window.PROVA_NOME || '', ...payload })],
       { type: 'application/json' }
@@ -87,7 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function finishQuiz() {
     clearInterval(timerInterval);
     const nota = parseFloat((score / questions.length * 10).toFixed(2));
-    logAcesso({ concluido: true, acertos: score, total: questions.length, nota });
+    logAcesso({
+      concluido: true,
+      acertos: score,
+      total: questions.length,
+      nota,
+      respostas: buildRespostas(questions.length)
+    });
     document.title = '✅ Simulado Finalizado';
     appEl.innerHTML = `
       <style>
@@ -204,7 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.add('is-active');
 
     document.getElementById('confirmExit').onclick = () => {
-      logAcesso({ concluido: false, questao_abandono: current + 1 });
+      logAcesso({
+        concluido: false,
+        questao_abandono: current + 1,
+        respostas: buildRespostas(current)
+      });
       window.location.href = "/";
     };
 
@@ -218,4 +240,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('exitModal');
     modal.classList.remove('is-active');
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && questions.length > 0) {
+      logAcesso({
+        concluido: false,
+        questao_abandono: current + 1,
+        respostas: buildRespostas(current)
+      });
+    }
+  });
 });

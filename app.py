@@ -23,6 +23,14 @@ def init_db():
             questao_abandono INTEGER
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS respostas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sessao_id INTEGER NOT NULL REFERENCES acessos(id),
+            numero_questao INTEGER NOT NULL,
+            acertou INTEGER NOT NULL
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -84,22 +92,36 @@ def log_acesso():
         return jsonify({'error': 'Dados inválidos'}), 400
 
     conn = sqlite3.connect(DB_PATH)
-    conn.execute(
-        '''INSERT INTO acessos
-           (timestamp, prova, concluido, acertos, total, nota, questao_abandono)
-           VALUES (?, ?, ?, ?, ?, ?, ?)''',
-        (
-            datetime.now(timezone.utc).isoformat(),
-            data.get('prova', ''),
-            1 if data.get('concluido') else 0,
-            data.get('acertos'),
-            data.get('total'),
-            data.get('nota'),
-            data.get('questao_abandono'),
+    try:
+        cursor = conn.execute(
+            '''INSERT INTO acessos
+               (timestamp, prova, concluido, acertos, total, nota, questao_abandono)
+               VALUES (?, ?, ?, ?, ?, ?, ?)''',
+            (
+                datetime.now(timezone.utc).isoformat(),
+                data.get('prova', ''),
+                1 if data.get('concluido') else 0,
+                data.get('acertos'),
+                data.get('total'),
+                data.get('nota'),
+                data.get('questao_abandono'),
+            )
         )
-    )
-    conn.commit()
-    conn.close()
+        sessao_id = cursor.lastrowid
+
+        respostas = data.get('respostas', [])
+        if respostas:
+            conn.executemany(
+                'INSERT INTO respostas (sessao_id, numero_questao, acertou) VALUES (?, ?, ?)',
+                [(sessao_id, r['numero_questao'], 1 if r['acertou'] else 0) for r in respostas]
+            )
+
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
     return jsonify({'ok': True})
 
