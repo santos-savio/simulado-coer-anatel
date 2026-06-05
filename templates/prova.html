@@ -1,128 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Simulado COER</title>
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <!-- Bulma CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-
-  <style>
-    body {
-      background-color: #f4f6f8;
-      padding: 2rem;
-    }
-
-    .quiz-container {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .question {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-    }
-
-    .option {
-      padding: 1rem;
-      border: 1px solid #dbdbdb;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, border 0.3s ease;
-    }
-
-    .option:hover {
-      background-color: #f0f0f0;
-    }
-
-    .option.correct {
-      background-color: #d4edda;
-      border-color: #28a745;
-      color: #155724;
-    }
-
-    .option.wrong {
-      background-color: #f8d7da;
-      border-color: #dc3545;
-      color: #721c24;
-    }
-
-    #nextBtn {
-      display: none;
-      margin-top: 1rem;
-    }
-
-    .progress-container {
-      margin-bottom: 1.5rem;
-    }
-
-      .numero-questao {
-    /* background: #90b7df; */
-    font-size: 24px;
-    color: #383737;
-    padding: 6px 16px;
-    border-radius: 8px;
-    margin-top: 10px;
-    display: inline-block;
-  }
-
-  .bloco-questao {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #1976d2;
-    border-radius: 8px;
-  }
-
-  </style>
+    <meta charset="UTF-8">
+    <title>Simulado COER</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='prova.css') }}">
+    <script>
+        (function () {
+            var stored = localStorage.getItem('coer-theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (stored === 'dark' || (!stored && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body>
 
-  <div class="quiz-container">
-    <div id="app">
-    <div class="progress-container">
-    <progress class="progress is-primary" value="1" max="10" id="progressBar">1%</progress>
+    <div class="quiz-container">
+        <div id="app">
+            <div class="progress-container">
+                <progress class="progress is-primary" value="1" max="10" id="progressBar">1%</progress>
+            </div>
+
+            <div id="question" class="question">
+                A pergunta será exibida aqui
+            </div>
+
+            <div id="options">
+                <!-- Opções aparecerão aqui via JS -->
+            </div>
+
+            <button id="nextBtn" class="button is-link is-fullwidth">Próxima</button>
+        </div>
+
+        <script>window.PROVA_NOME = "{{ prova_nome }}";</script>
+        <script src="/static/script.js"></script>
     </div>
 
-    <div id="question" class="question">
-    A pergunta será exibida aqui
+    <!-- Modal de confirmação para sair da prova -->
+    <div id="exitModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Confirmar saída</p>
+            </header>
+            <section class="modal-card-body">
+                <p>Tem certeza que deseja sair da prova?</p>
+                <p class="has-text-weight-semibold mt-2">Seu progresso será perdido.</p>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-danger" id="confirmExit">Sim, sair da prova</button>
+                <button class="button" id="cancelExit">Cancelar</button>
+            </footer>
+        </div>
     </div>
 
-    <div id="options">
-    <!-- Opções aparecerão aqui via JS -->
-    </div>
-
-    <button id="nextBtn" class="button is-link is-fullwidth">Próxima</button>
-    </div>
-
-    <script>window.PROVA_NOME = "{{ prova_nome }}";</script>
-    <script src="/static/script.js"></script>
-  </div>
-
-  <!-- Modal de confirmação para sair da prova -->
-  <div id="exitModal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Confirmar saída</p>
-      </header>
-      <section class="modal-card-body">
-        <p>Tem certeza que deseja sair da prova?</p>
-        <p class="has-text-weight-semibold mt-2">Seu progresso será perdido.</p>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-danger" id="confirmExit">Sim, sair da prova</button>
-        <button class="button" id="cancelExit">Cancelar</button>
-      </footer>
-    </div>
-  </div>
-
+    <script>
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (!localStorage.getItem('coer-theme')) {
+                document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+body {
+    padding: 2rem;
+}
+
+.main-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card {
+    padding: 2rem;
+    background-color: var(--bg-card);
+    box-shadow: var(--shadow-card);
+    transition: background-color 0.25s, box-shadow 0.25s;
+}
+
+.title {
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+}
+
+.buttons button {
+    margin-bottom: 0.75rem;
+    width: 100%;
+}

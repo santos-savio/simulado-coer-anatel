@@ -1,163 +1,167 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Simulado COER</title>
-        <meta name="description" content="Simulado gratuito para o exame COER da Anatel — treine com questões oficiais de Técnica Operacional, Legislação de Telecomunicações e Eletrônica.">
-        <meta property="og:title" content="Simulado COER — Radioamador">
-        <meta property="og:description" content="Simulado gratuito para o exame COER da Anatel. Questões oficiais de Técnica Operacional, Legislação de Telecomunicações e Eletrônica e Eletricidade.">
-        <meta property="og:type" content="website">
-        <meta property="og:image" content="{{ url_for('static', filename='favicon.png', _external=True) }}">
-        <!-- Importa o Bulma CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-        
-        <!-- CSS customizado -->
-        <style>
-            body {
-                background-color: #f4f6f8;
-                padding: 2rem;
-            }
-
-            .main-container {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-
-            .card {
-                padding: 2rem;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                background-color: white;
-            }
-
-            .title {
-                margin-bottom: 0.5rem;
-            }
-
-            .subtitle {
-                margin-bottom: 1rem;
-                color: #4a4a4a;
-            }
-
-            .buttons button {
-                margin-bottom: 0.75rem;
-                width: 100%;
-            }
-        </style>
-    </head>
-
-    <body>
-    <div class="main-container">
-        <div class="card">
-            <div class="content has-text-centered">
-                <p class="title is-3">Simulado COER</p>
-
-
-        <p class="subtitle is-5"><strong>Certificado de Operador de Estação de Radioamador</strong></p>
-                <p>
-                    Provas retiradas do site da
-                    <a href="https://www.gov.br/anatel/pt-br/regulado/outorga/radioamador-e-radio-cidadao/habilitacao-do-radioamador" target="_blank">
-                        Anatel
-                    </a>
-                </p>
-            </div>
-            <div class="content">
-                <p class="has-text-centered has-text-weight-semibold">Selecione uma prova para praticar:</p>
-                <div class="buttons is-centered is-flex-direction-column">
-                    <button onclick="iniciarProva('/prova-operacional')" class="button is-primary is-medium">
-                        Técnica e Ética Operacional
-                    </button>
-                    <button onclick="iniciarProva('/prova-legislacao')" class="button is-primary is-medium">
-                        Legislação de Telecomunicações
-                    </button>
-                    <button onclick="iniciarProva('/prova-eletronica')" class="button is-primary is-medium">
-                        Eletrônica e Eletricidade
-                    </button>
-                </div>
-            </div>
-
-            <div class="content">
-                <p class="has-text-centered has-text-weight-semibold">Entenda o processo para obter o COER:</p>
-                <div class="buttons is-centered">
-                    <button onclick="window.location.href='/instrucoes'" class="button is-primary is-medium">
-                        Como obter o COER?
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <p class="has-text-centered mt-4" style="font-size:0.85rem; color:#888;">
-        Feito por <a href="https://savio.dev.br/" target="_blank" style="color:#2e5adf;">Savio Santos</a>
-    </p>
-
-    <!-- Modal de Termos de Uso -->
-    <div id="termosModal" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card" style="max-width:560px;">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Termos de Uso</p>
-            </header>
-            <section class="modal-card-body">
-                <p>Este simulado é uma ferramenta educacional gratuita para preparação ao exame <strong>COER</strong> (Certificado de Operador de Estação de Radioamador) da Anatel.</p>
-
-                <p class="mt-3"><strong>O que registramos ao usar o simulado:</strong></p>
-                <ul>
-                    <li>A prova selecionada</li>
-                    <li>Resultado final (acertos e nota), se você concluir</li>
-                    <li>Acerto ou erro de cada questão respondida, para identificar quais são as mais difíceis</li>
-                    <li>Número da questão em que estava ao sair, se não concluir</li>
-                </ul>
-
-                <p class="mt-3"><strong>O que não fazemos:</strong></p>
-                <ul>
-                    <li>Não coletamos nome, e-mail ou qualquer dado pessoal identificável</li>
-                    <li>Não compartilhamos dados com terceiros</li>
-                    <li>Os registros são usados exclusivamente para estatísticas de desempenho do simulado</li>
-                </ul>
-
-                <p class="mt-3"><strong>Aviso:</strong> As questões são baseadas no material oficial disponibilizado pela Anatel. Este site não tem vínculo oficial com a Anatel e não garante a atualidade das questões.</p>
-            </section>
-            <footer class="modal-card-foot" style="justify-content:flex-end; gap:0.5rem;">
-                <button class="button" onclick="fecharTermos()">Cancelar</button>
-                <button class="button is-primary" onclick="aceitarTermos()">Aceitar e iniciar</button>
-            </footer>
-        </div>
-    </div>
-
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simulado COER</title>
+    <meta name="description" content="Simulado gratuito para o exame COER da Anatel — treine com questões oficiais de Técnica Operacional, Legislação de Telecomunicações e Eletrônica.">
+    <meta property="og:title" content="Simulado COER — Radioamador">
+    <meta property="og:description" content="Simulado gratuito para o exame COER da Anatel. Questões oficiais de Técnica Operacional, Legislação de Telecomunicações e Eletrônica e Eletricidade.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='favicon.png', _external=True) }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <script>
-        var _provaDestino = '';
-
-        document.addEventListener('DOMContentLoaded', function () {
-            if (!sessionStorage.getItem('termos_aceitos_20260604')) {
-                document.getElementById('termosModal').classList.add('is-active');
+        (function () {
+            var stored = localStorage.getItem('coer-theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (stored === 'dark' || (!stored && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
             }
-            document.querySelector('#termosModal .modal-background')
-                .addEventListener('click', fecharTermos);
+        })();
+    </script>
+</head>
+
+<body>
+<button class="dark-toggle" id="darkToggle">🌙 Modo escuro</button>
+
+<div class="main-container">
+    <div class="card">
+        <div class="content has-text-centered">
+            <p class="title is-3">Simulado COER</p>
+            <p class="subtitle is-5"><strong>Certificado de Operador de Estação de Radioamador</strong></p>
+            <p>
+                Provas retiradas do site da
+                <a href="https://www.gov.br/anatel/pt-br/regulado/outorga/radioamador-e-radio-cidadao/habilitacao-do-radioamador" target="_blank">
+                    Anatel
+                </a>
+            </p>
+        </div>
+        <div class="content">
+            <p class="has-text-centered has-text-weight-semibold">Selecione uma prova para praticar:</p>
+            <div class="buttons is-centered is-flex-direction-column">
+                <button onclick="iniciarProva('/prova-operacional')" class="button is-primary is-medium">
+                    Técnica e Ética Operacional
+                </button>
+                <button onclick="iniciarProva('/prova-legislacao')" class="button is-primary is-medium">
+                    Legislação de Telecomunicações
+                </button>
+                <button onclick="iniciarProva('/prova-eletronica')" class="button is-primary is-medium">
+                    Eletrônica e Eletricidade
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <p class="has-text-centered has-text-weight-semibold">Entenda o processo para obter o COER:</p>
+            <div class="buttons is-centered">
+                <button onclick="window.location.href='/instrucoes'" class="button is-primary is-medium">
+                    Como obter o COER?
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p class="has-text-centered mt-4 page-footer">
+    Feito por <a href="https://savio.dev.br/" target="_blank">Savio Santos</a>  - PU4SVG
+</p>
+
+<!-- Modal de Termos de Uso -->
+<div id="termosModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="max-width:560px;">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Termos de Uso</p>
+        </header>
+        <section class="modal-card-body">
+            <p>Este simulado é uma ferramenta educacional gratuita para preparação ao exame <strong>COER</strong> (Certificado de Operador de Estação de Radioamador) da Anatel.</p>
+
+            <p class="mt-3"><strong>O que registramos ao usar o simulado:</strong></p>
+            <ul>
+                <li>A prova selecionada</li>
+                <li>Resultado final (acertos e nota), se você concluir</li>
+                <li>Acerto ou erro de cada questão respondida, para identificar quais são as mais difíceis</li>
+                <li>Número da questão em que estava ao sair, se não concluir</li>
+            </ul>
+
+            <p class="mt-3"><strong>O que não fazemos:</strong></p>
+            <ul>
+                <li>Não coletamos nome, e-mail ou qualquer dado pessoal identificável</li>
+                <li>Não compartilhamos dados com terceiros</li>
+                <li>Os registros são usados exclusivamente para estatísticas de desempenho do simulado</li>
+            </ul>
+
+            <p class="mt-3"><strong>Aviso:</strong> As questões são baseadas no material oficial disponibilizado pela Anatel. Este site não tem vínculo oficial com a Anatel e não garante a atualidade das questões.</p>
+        </section>
+        <footer class="modal-card-foot" style="justify-content:flex-end; gap:0.5rem;">
+            <button class="button" onclick="fecharTermos()">Cancelar</button>
+            <button class="button is-primary" onclick="aceitarTermos()">Aceitar e iniciar</button>
+        </footer>
+    </div>
+</div>
+
+<script>
+    var _provaDestino = '';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!sessionStorage.getItem('termos_aceitos_20260604')) {
+            document.getElementById('termosModal').classList.add('is-active');
+        }
+        document.querySelector('#termosModal .modal-background')
+            .addEventListener('click', fecharTermos);
+    });
+
+    function iniciarProva(url) {
+        if (!sessionStorage.getItem('termos_aceitos_20260604')) {
+            _provaDestino = url;
+            document.getElementById('termosModal').classList.add('is-active');
+            return;
+        }
+        window.location.href = url;
+    }
+
+    function aceitarTermos() {
+        sessionStorage.setItem('termos_aceitos_20260604', '1');
+        document.getElementById('termosModal').classList.remove('is-active');
+        if (_provaDestino) {
+            window.location.href = _provaDestino;
+        }
+    }
+
+    function fecharTermos() {
+        document.getElementById('termosModal').classList.remove('is-active');
+    }
+
+    // Dark mode toggle
+    (function () {
+        var html = document.documentElement;
+        var btn = document.getElementById('darkToggle');
+
+        function applyTheme(dark) {
+            html.setAttribute('data-theme', dark ? 'dark' : 'light');
+            btn.textContent = dark ? '☀️ Modo claro' : '🌙 Modo escuro';
+        }
+
+        var stored = localStorage.getItem('coer-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored === 'dark' || (!stored && prefersDark));
+
+        btn.addEventListener('click', function () {
+            var isDark = html.getAttribute('data-theme') === 'dark';
+            localStorage.setItem('coer-theme', isDark ? 'light' : 'dark');
+            applyTheme(!isDark);
         });
 
-        function iniciarProva(url) {
-            if (!sessionStorage.getItem('termos_aceitos_20260604')) {
-                _provaDestino = url;
-                document.getElementById('termosModal').classList.add('is-active');
-                return;
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (!localStorage.getItem('coer-theme')) {
+                applyTheme(e.matches);
             }
-            window.location.href = url;
-        }
-
-        function aceitarTermos() {
-            sessionStorage.setItem('termos_aceitos_20260604', '1');
-            document.getElementById('termosModal').classList.remove('is-active');
-            if (_provaDestino) {
-                window.location.href = _provaDestino;
-            }
-        }
-
-        function fecharTermos() {
-            document.getElementById('termosModal').classList.remove('is-active');
-        }
-    </script>
+        });
+    })();
+</script>
 </body>
 </html>

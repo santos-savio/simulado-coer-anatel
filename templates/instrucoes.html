@@ -7,98 +7,35 @@
     <title>Como obter o COER — Simulado COER</title>
     <meta name="description" content="Guia completo para obter o COER Classe C, B ou A da ANATEL: passo a passo, estrutura da prova, privilégios e processo de upgrade de classe.">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <style>
-        body {
-            background-color: #f4f6f8;
-            padding: 2rem 1rem;
-        }
-        .page-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .content-card {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem 2.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            background-color: #3273dc;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-right: 0.6rem;
-            flex-shrink: 0;
-        }
-        .step-title {
-            display: flex;
-            align-items: center;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #363636;
-            margin-bottom: 0.75rem;
-        }
-        .step-block {
-            border-left: 3px solid #3273dc;
-            padding-left: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .upgrade-block {
-            border-left: 3px solid #48c774;
-            padding-left: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .upgrade-title {
-            display: flex;
-            align-items: center;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #257953;
-            margin-bottom: 0.75rem;
-        }
-        .upgrade-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.15rem 0.6rem;
-            border-radius: 4px;
-            background-color: #48c774;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            margin-right: 0.6rem;
-        }
-        @media (max-width: 600px) {
-            .content-card { padding: 1.25rem 1rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='instrucoes.css') }}">
+    <script>
+        (function () {
+            var stored = localStorage.getItem('coer-theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (stored === 'dark' || (!stored && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
 </head>
 <body>
 <div class="page-container">
 
-    <!-- Voltar -->
     <div class="mb-4">
-        <a href="/" class="button is-light is-small">
-            ← Voltar ao Simulado
-        </a>
+        <a href="/" class="button is-light is-small">← Voltar ao Simulado</a>
     </div>
 
     <div class="content-card">
         <h1 class="title is-4">Como obter o COER</h1>
-        <p class="subtitle is-6 mb-4" style="color:#6b6b6b; margin-top: 0;">
+        <p class="subtitle is-6 mb-4">
             Certificado de Operador de Estação de Radioamador &mdash; ANATEL
         </p>
 
         <!-- Fluxo visual -->
-        <div class="notification is-light mb-5" style="background:#f0f4ff; border-left:4px solid #3273dc; padding:1rem 1.25rem;">
-            <p class="has-text-weight-semibold mb-2" style="color:#3273dc;">Fluxo resumido</p>
-            <div style="font-family:monospace; font-size:0.85rem; color:#444; line-height:1.8;">
+        <div class="flow-box mb-5">
+            <p class="flow-box-title">Fluxo resumido</p>
+            <div class="flow-box-mono">
                 Conta gov.br &rarr; Inscrição SEC &rarr; Prova Online &rarr; Emissão COER &rarr; Outorga (Mosaico) &rarr; Licença de Estação
             </div>
         </div>
@@ -139,7 +76,7 @@
                     <li>Conhecimentos Básicos de Eletrônica e Eletricidade</li>
                 </ol>
 
-                <table class="table is-bordered is-striped is-fullwidth mt-3" style="font-size:0.9rem;">
+                <table class="table is-bordered is-striped is-fullwidth mt-3">
                     <thead>
                         <tr><th>Item</th><th>Detalhe</th></tr>
                     </thead>
@@ -152,7 +89,7 @@
                     </tbody>
                 </table>
 
-                <div class="notification is-warning is-light py-2 px-3 mt-2" style="font-size:0.9rem;">
+                <div class="notification is-warning is-light py-2 px-3 mt-2">
                     Reprovação em <strong>qualquer uma</strong> das 3 disciplinas implica reprovação geral.
                 </div>
 
@@ -191,10 +128,10 @@
         <div class="step-block">
             <div class="step-title"><span class="step-number">6</span> Obter a Outorga (SIR)</div>
             <div class="content">
-                <div class="notification is-info is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                <div class="notification is-info is-light py-2 px-3 mb-3">
                     O COER <strong>habilita</strong>, mas não autoriza operação. É preciso solicitar a <strong>Outorga de Serviço de Interesse Restrito (SIR)</strong> — apenas na primeira vez.
                 </div>
-                <div class="notification is-warning is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                <div class="notification is-warning is-light py-2 px-3 mb-3">
                     <strong>Pré-requisito:</strong> antes de prosseguir, registre-se no <strong>SEI (Sistema Eletrônico de Informações)</strong> da ANATEL e configure seus direitos de acesso. O MMAR depende do SEI para funcionar.
                 </div>
                 <ol>
@@ -209,7 +146,7 @@
         <div class="step-block">
             <div class="step-title"><span class="step-number">7</span> Licenciar a Estação pelo MMAR</div>
             <div class="content">
-                <div class="notification is-primary is-light py-2 px-3 mb-3" style="font-size:0.9rem;">
+                <div class="notification is-primary is-light py-2 px-3 mb-3">
                     <strong>Novo em 2026 — Sistema MMAR:</strong> o licenciamento agora é feito pelo módulo <strong>MMAR – Licenciamento Radioamador</strong>, dentro do Mosaico. Ele substituiu o antigo SCRA e unifica tudo em um único ambiente digital.
                 </div>
                 <ol>
@@ -234,7 +171,7 @@
                     <li>Ambas são geradas e pagas diretamente no MMAR.</li>
                 </ul>
 
-                <div class="notification is-light py-2 px-3 mt-3" style="font-size:0.9rem;">
+                <div class="notification is-light py-2 px-3 mt-3">
                     <strong>Bônus — IARP:</strong> se deseja operar no exterior, solicite pelo MMAR o <strong>Certificado IARP</strong> (International Amateur Radio Permit). É gerado automaticamente em inglês, espanhol ou francês.
                 </div>
             </div>
@@ -244,12 +181,12 @@
         <hr>
         <h2 class="title is-5 mt-5 mb-3">Comparativo de Classes</h2>
 
-        <div class="notification is-success is-light py-2 px-3 mb-4" style="font-size:0.9rem;">
+        <div class="notification is-success is-light py-2 px-3 mb-4">
             <strong>Novidade (Resolução 777/2025):</strong> o Código Morse <strong>não é mais obrigatório</strong> para nenhuma classe. Continua permitido operar em CW, mas deixou de ser barreira de progressão.
         </div>
 
         <p class="has-text-weight-semibold mb-2">Estrutura da prova por classe</p>
-        <table class="table is-bordered is-striped is-fullwidth mb-4" style="font-size:0.9rem;">
+        <table class="table is-bordered is-striped is-fullwidth mb-4">
             <thead>
                 <tr>
                     <th>Classe</th>
@@ -275,7 +212,7 @@
         </table>
 
         <p class="has-text-weight-semibold mb-2">Privilégios de operação</p>
-        <table class="table is-bordered is-striped is-fullwidth mb-5" style="font-size:0.9rem;">
+        <table class="table is-bordered is-striped is-fullwidth mb-5">
             <thead>
                 <tr><th>Classe</th><th>Bandas disponíveis</th><th>Potência máxima</th></tr>
             </thead>
@@ -315,7 +252,7 @@
                     <li>Com aprovação, o COER Classe B é emitido — substitui o C.</li>
                     <li>Atualize a classe na licença de estação pelo <strong>MMAR</strong>.</li>
                 </ol>
-                <div class="notification is-light py-2 px-3" style="font-size:0.9rem;">
+                <div class="notification is-light py-2 px-3">
                     Não é necessário refazer as disciplinas aprovadas na Classe C.
                 </div>
             </div>
@@ -333,7 +270,7 @@
                     <li>Aprovado → COER Classe A emitido.</li>
                     <li>Atualize a classe na licença de estação pelo <strong>MMAR</strong>.</li>
                 </ol>
-                <div class="notification is-light py-2 px-3" style="font-size:0.9rem;">
+                <div class="notification is-light py-2 px-3">
                     Classe A também habilita ser <strong>responsável técnico</strong> de estações de entidades (clubes, associações).
                 </div>
             </div>
@@ -376,10 +313,18 @@
 
     </div><!-- /content-card -->
 
-    <p class="has-text-centered mt-4" style="font-size:0.85rem; color:#888;">
-        Feito por <a href="https://savio.dev.br/" target="_blank" style="color:#2e5adf;">Savio Santos</a>
+    <p class="has-text-centered mt-4 page-footer">
+        Feito por <a href="https://savio.dev.br/" target="_blank">Savio Santos</a>
     </p>
 
 </div><!-- /page-container -->
+
+<script>
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('coer-theme')) {
+            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+    });
+</script>
 </body>
 </html>
