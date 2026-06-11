@@ -57,6 +57,11 @@ def instrucoes():
     return render_template('instrucoes.html')
 
 
+@app.route('/calculadora-antenas')
+def calculadora_antenas():
+    return render_template('antenas.html')
+
+
 @app.route('/prova-operacional')
 def prova_operacional():
     carregar_prova('provas/anatel-operacional.json')

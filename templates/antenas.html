@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calculadora de Antenas — Simulado COER</title>
+    <meta name="description" content="Calculadora de dimensionamento de antenas de radioamador: descubra o comprimento físico (1/4, 1/2, 5/8 e onda completa) que ressoa na frequência desejada.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='antenas.css') }}">
+    <script>
+        (function () {
+            var stored = localStorage.getItem('coer-theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (stored === 'dark' || (!stored && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+</head>
+<body>
+<button class="dark-toggle" id="darkToggle">🌙 Modo escuro</button>
+
+<a href="/" class="button is-light is-small back-btn">← Voltar ao Simulado</a>
+
+<div class="page-container">
+
+    <div class="content-card">
+        <h1 class="title is-4">Calculadora de Antenas</h1>
+        <p class="subtitle is-6 mb-4">
+            Dimensione o comprimento físico para ressoar na frequência certa
+        </p>
+
+        <!-- Sliders (largura total) -->
+        <div class="sliders-row">
+            <div class="slider-block">
+                <div class="slider-head">
+                    <label for="freqRange">Frequência</label>
+                    <div class="slider-value">
+                        <input type="text" inputmode="decimal" id="freqNum">
+                        <span class="unit">MHz</span>
+                    </div>
+                </div>
+                <input type="range" id="freqRange" min="1" max="500" step="0.1">
+            </div>
+
+            <div class="slider-block">
+                <div class="slider-head">
+                    <label for="waveRange">Comprimento de onda (&lambda;)</label>
+                    <div class="slider-value">
+                        <input type="text" inputmode="decimal" id="waveNum">
+                        <span class="unit">m</span>
+                    </div>
+                </div>
+                <input type="range" id="waveRange" min="0" max="1000" step="1">
+            </div>
+        </div>
+
+        <div class="calc-grid">
+
+            <!-- Coluna de fórmulas + onda -->
+            <div class="calc-info">
+                <div class="flow-box">
+                    <p class="flow-box-title">Fórmulas usadas</p>
+                    <div class="flow-box-mono">
+                        Comprimento de onda &lambda; (m) = 300 &divide; frequência (MHz)<br>
+                        1/4 de onda = 75 &divide; f &nbsp;&middot;&nbsp; 1/2 onda = 150 &divide; f<br>
+                        5/8 de onda = 187,5 &divide; f &nbsp;&middot;&nbsp; onda completa = 300 &divide; f
+                    </div>
+                </div>
+
+                <!-- Onda animada -->
+                <canvas id="waveCanvas" class="wave-canvas"></canvas>
+            </div>
+
+            <!-- Coluna de resultados (sempre visível) -->
+            <div class="calc-results">
+                <h2 class="title is-5 mb-3">Tamanhos para <span id="panelFreq">146,0</span> MHz</h2>
+                <table class="table is-bordered is-fullwidth result-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Comprimento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-factor="0.25"><td>1/4 de onda</td><td id="res-0.25">—</td></tr>
+                        <tr data-factor="0.5"><td>1/2 onda</td><td id="res-0.5">—</td></tr>
+                        <tr data-factor="0.625"><td>5/8 de onda</td><td id="res-0.625">—</td></tr>
+                        <tr data-factor="1"><td>Onda completa</td><td id="res-1">—</td></tr>
+                    </tbody>
+                </table>
+                <p class="result-note">
+                    Comprimento de onda completo: <strong id="lambdaOut">—</strong>.
+                    Valores teóricos no vácuo — antenas reais usam um <em>fator de velocidade</em>
+                    (tipicamente 0,95) que reduz o tamanho em alguns por cento.
+                </p>
+            </div>
+
+        </div><!-- /calc-grid -->
+
+    </div><!-- /content-card -->
+
+    <p class="has-text-centered mt-4 page-footer">
+        Feito por <a href="https://savio.dev.br/" target="_blank">Savio Santos</a>
+        - PU4SVG
+    </p>
+
+</div><!-- /page-container -->
+
+<script>
+    (function () {
+        var FREQ_MIN = 1, FREQ_MAX = 500;
+        var freq = 146;            // estado canônico (MHz)
+
+        // limites de λ (m): de 300/500 a 300/1
+        var LAMBDA_MIN = 300 / FREQ_MAX, LAMBDA_MAX = 300 / FREQ_MIN;
+        var LN_MIN = Math.log(LAMBDA_MIN), LN_MAX = Math.log(LAMBDA_MAX);
+        var WAVE_STEPS = 1000;
+
+        // posição (0..1000) do slider log <-> comprimento de onda (m)
+        function lambdaToPos(l) {
+            return (Math.log(clamp(l, LAMBDA_MIN, LAMBDA_MAX)) - LN_MIN)
+                / (LN_MAX - LN_MIN) * WAVE_STEPS;
+        }
+        function posToLambda(p) {
+            return Math.exp(LN_MIN + (p / WAVE_STEPS) * (LN_MAX - LN_MIN));
+        }
+
+        var freqRange = document.getElementById('freqRange');
+        var freqNum = document.getElementById('freqNum');
+        var waveRange = document.getElementById('waveRange');
+        var waveNum = document.getElementById('waveNum');
+        var panelFreq = document.getElementById('panelFreq');
+        var lambdaOut = document.getElementById('lambdaOut');
+
+        function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+
+        // não sobrescreve o campo de texto que o usuário está digitando
+        function setVal(el, str) {
+            if (el !== document.activeElement) el.value = str;
+        }
+
+        // pt-BR: vírgula decimal
+        function fmt(n, dec) {
+            return n.toLocaleString('pt-BR', {
+                minimumFractionDigits: dec, maximumFractionDigits: dec
+            });
+        }
+
+        // tamanho em cm formatado, com metros entre parênteses quando >= 100 cm
+        function fmtLen(cm) {
+            var txt = fmt(cm, cm < 10 ? 1 : 0) + ' cm';
+            if (cm >= 100) txt += ' (' + fmt(cm / 100, 2) + ' m)';
+            return txt;
+        }
+
+        function antLenCm(f, fac) { return (300 / f) * fac * 100; }
+
+        function render() {
+            var lambda = 300 / freq;             // m
+
+            freqRange.value = freq;
+            setVal(freqNum, fmt(freq, 1));
+            waveRange.value = lambdaToPos(lambda);
+            setVal(waveNum, fmt(lambda, 2));
+
+            panelFreq.textContent = fmt(freq, 1);
+            lambdaOut.textContent = fmtLen(lambda * 100);
+
+            ['0.25', '0.5', '0.625', '1'].forEach(function (k) {
+                document.getElementById('res-' + k).textContent =
+                    fmtLen(antLenCm(freq, parseFloat(k)));
+            });
+        }
+
+        function setFromFrequency(f) {
+            if (!isFinite(f) || f <= 0) return;
+            freq = clamp(f, FREQ_MIN, FREQ_MAX);
+            render();
+        }
+
+        // --- handlers ---
+        freqRange.addEventListener('input', function () {
+            setFromFrequency(parseFloat(freqRange.value));
+        });
+        freqNum.addEventListener('input', function () {
+            setFromFrequency(parseFloat(freqNum.value.replace(',', '.')));
+        });
+
+        waveRange.addEventListener('input', function () {
+            setFromFrequency(300 / posToLambda(parseFloat(waveRange.value)));
+        });
+        waveNum.addEventListener('input', function () {
+            setFromFrequency(300 / parseFloat(waveNum.value.replace(',', '.')));
+        });
+
+        // ── Animação da onda ──
+        var canvas = document.getElementById('waveCanvas');
+        var ctx = canvas.getContext('2d');
+        var DPR = window.devicePixelRatio || 1;
+        var cssW = 0, cssH = 0;
+
+        function resizeCanvas() {
+            cssW = canvas.clientWidth;
+            cssH = canvas.clientHeight;
+            canvas.width = Math.round(cssW * DPR);
+            canvas.height = Math.round(cssH * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function cssVar(name) {
+            return getComputedStyle(document.documentElement)
+                .getPropertyValue(name).trim();
+        }
+
+        var phase = 0;
+        var X_DOT = 52;
+
+        function drawWave() {
+            var lambda = 300 / freq;
+            // mesma escala log do slider: λ curto → onda apertada; λ longo → larga
+            var pos = (Math.log(lambda) - LN_MIN) / (LN_MAX - LN_MIN);
+            var pxLambda = 26 + pos * (cssW * 0.9 - 26);
+
+            var midY = cssH * 0.42;
+            var amp = Math.min(cssH * 0.26, 38);
+            var primary = cssVar('--color-primary') || '#3273dc';
+            var gray = cssVar('--border-color') || '#bbbbbb';
+            var muted = cssVar('--text-muted') || '#888888';
+
+            ctx.clearRect(0, 0, cssW, cssH);
+
+            function waveY(x) {
+                return midY - amp * Math.sin(2 * Math.PI * (x - phase) / pxLambda);
+            }
+
+            // onda: azul que desvanece para cinza à direita
+            var grad = ctx.createLinearGradient(0, 0, cssW, 0);
+            grad.addColorStop(0, primary);
+            grad.addColorStop(0.72, primary);
+            grad.addColorStop(1, gray);
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            for (var x = 0; x <= cssW; x++) {
+                var y = waveY(x);
+                if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // ponto que cavalga a onda (com brilho)
+            var yDot = waveY(X_DOT);
+            ctx.fillStyle = primary;
+            ctx.globalAlpha = 0.22;
+            ctx.beginPath(); ctx.arc(X_DOT, yDot, 13, 0, 2 * Math.PI); ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.beginPath(); ctx.arc(X_DOT, yDot, 6, 0, 2 * Math.PI); ctx.fill();
+
+            // colchete medindo um comprimento de onda (λ)
+            var by = midY + amp + 22;
+            var bx0 = X_DOT, bx1 = X_DOT + pxLambda;
+            ctx.strokeStyle = gray;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath(); ctx.moveTo(bx0, by); ctx.lineTo(bx1, by); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(bx0, by - 5); ctx.lineTo(bx0, by + 5);
+            ctx.moveTo(bx1, by - 5); ctx.lineTo(bx1, by + 5);
+            ctx.stroke();
+            ctx.fillStyle = muted;
+            ctx.font = 'italic 15px serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('λ', (bx0 + bx1) / 2, by - 8);
+        }
+
+        function animate() {
+            phase += 0.6;            // velocidade de deslocamento (px/frame)
+            drawWave();
+            requestAnimationFrame(animate);
+        }
+
+        resizeCanvas();
+        render();
+        animate();
+    })();
+
+    // Dark mode toggle
+    (function () {
+        var html = document.documentElement;
+        var btn = document.getElementById('darkToggle');
+
+        function applyTheme(dark) {
+            html.setAttribute('data-theme', dark ? 'dark' : 'light');
+            btn.textContent = dark ? '☀️ Modo claro' : '🌙 Modo escuro';
+        }
+
+        var stored = localStorage.getItem('coer-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored === 'dark' || (!stored && prefersDark));
+
+        btn.addEventListener('click', function () {
+            var isDark = html.getAttribute('data-theme') === 'dark';
+            localStorage.setItem('coer-theme', isDark ? 'light' : 'dark');
+            applyTheme(!isDark);
+        });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (!localStorage.getItem('coer-theme')) {
+                applyTheme(e.matches);
+            }
+        });
+    })();
+</script>
+</body>
+</html>
