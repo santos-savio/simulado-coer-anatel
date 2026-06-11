@@ -150,7 +150,7 @@ body {
     border-color: var(--border-color);
 }
 
-[data-theme="dark"] .modal-card-foot .button:not(.is-primary) {
+[data-theme="dark"] .modal-card-foot .button:not(.is-primary):not(.is-danger) {
     background-color: var(--bg-notif);
     color: var(--text);
     border-color: var(--border-color);
