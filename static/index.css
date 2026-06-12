@@ -26,4 +26,19 @@ body {
 .buttons button {
     margin-bottom: 0.75rem;
     width: 100%;
+    white-space: normal;
+    height: auto;
+    min-height: 2.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
 }
