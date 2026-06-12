@@ -32,13 +32,15 @@
             Dimensione o comprimento físico para ressoar na frequência certa
         </p>
 
-        <!-- Sliders (largura total) -->
+        <!-- Sliders de frequência e onda (largura total) -->
         <div class="sliders-row">
             <div class="slider-block">
                 <div class="slider-head">
                     <label for="freqRange">Frequência</label>
                     <div class="slider-value">
+                        <button type="button" class="step-btn" data-kind="freq" data-dir="-1" aria-label="Diminuir frequência">−</button>
                         <input type="text" inputmode="decimal" id="freqNum">
+                        <button type="button" class="step-btn" data-kind="freq" data-dir="1" aria-label="Aumentar frequência">+</button>
                         <span class="unit">MHz</span>
                     </div>
                 </div>
@@ -49,11 +51,49 @@
                 <div class="slider-head">
                     <label for="waveRange">Comprimento de onda (&lambda;)</label>
                     <div class="slider-value">
+                        <button type="button" class="step-btn" data-kind="wave" data-dir="-1" aria-label="Diminuir comprimento de onda">−</button>
                         <input type="text" inputmode="decimal" id="waveNum">
+                        <button type="button" class="step-btn" data-kind="wave" data-dir="1" aria-label="Aumentar comprimento de onda">+</button>
                         <span class="unit">m</span>
                     </div>
                 </div>
                 <input type="range" id="waveRange" min="0" max="1000" step="1">
+            </div>
+
+        </div>
+
+        <!-- Antena: slider no topo; abaixo, toggle (esq.) e seletor de fração (dir.) -->
+        <div class="antenna-section">
+            <div class="slider-block antenna-slider">
+                <div class="slider-head">
+                    <label for="antRange">Tamanho da antena <span class="case-label" id="antCaseLabel">(1/2 onda)</span></label>
+                    <div class="slider-value">
+                        <button type="button" class="step-btn" data-kind="ant" data-dir="-1" aria-label="Diminuir tamanho da antena">−</button>
+                        <input type="text" inputmode="decimal" id="antNum">
+                        <button type="button" class="step-btn" data-kind="ant" data-dir="1" aria-label="Aumentar tamanho da antena">+</button>
+                        <span class="unit">cm</span>
+                    </div>
+                </div>
+                <input type="range" id="antRange" min="0" max="1000" step="1">
+            </div>
+
+            <div class="mode-stack">
+                <span class="mode-label">Ao trocar a fração, recalcular:</span>
+                <div class="mode-toggle" id="modeToggle">
+                    <button class="mode-btn is-active" data-mode="antenna">Tamanho da antena</button>
+                    <button class="mode-btn" data-mode="wave">Frequência / onda</button>
+                </div>
+            </div>
+
+            <div class="case-block">
+                <p class="has-text-weight-semibold mb-2">Tipo de antena (fração da onda)</p>
+                <div class="case-selector" id="caseSelector">
+                    <button class="case-btn" data-factor="0.25">1/4 de onda</button>
+                    <button class="case-btn is-active" data-factor="0.5">1/2 onda</button>
+                    <button class="case-btn" data-factor="0.625">5/8 de onda</button>
+                    <button class="case-btn" data-factor="1">Onda completa</button>
+                </div>
+                <p class="size-warning" id="sizeWarning" hidden></p>
             </div>
         </div>
 
@@ -113,6 +153,15 @@
     (function () {
         var FREQ_MIN = 1, FREQ_MAX = 500;
         var freq = 146;            // estado canônico (MHz)
+        var factor = 0.5;          // fração da onda selecionada
+        var changeMode = 'antenna';// ao trocar a fração: 'antenna' (mantém freq) | 'wave' (mantém tamanho)
+        var forceUpdate = false;   // bypass do guard setVal ao usar botões de step
+        var CASE_NAMES = {
+            '0.25': '1/4 de onda',
+            '0.5': '1/2 onda',
+            '0.625': '5/8 de onda',
+            '1': 'onda completa'
+        };
 
         // limites de λ (m): de 300/500 a 300/1
         var LAMBDA_MIN = 300 / FREQ_MAX, LAMBDA_MAX = 300 / FREQ_MIN;
@@ -128,18 +177,35 @@
             return Math.exp(LN_MIN + (p / WAVE_STEPS) * (LN_MAX - LN_MIN));
         }
 
+        // escala FIXA do slider de tamanho (log): 15 cm a 30000 cm (300 m)
+        var ANT_MIN = 15, ANT_MAX = 30000;
+        var LNA_MIN = Math.log(ANT_MIN), LNA_MAX = Math.log(ANT_MAX);
+        function antToPos(L) {
+            return (Math.log(clamp(L, ANT_MIN, ANT_MAX)) - LNA_MIN)
+                / (LNA_MAX - LNA_MIN) * WAVE_STEPS;
+        }
+        function posToAnt(p) {
+            return Math.exp(LNA_MIN + (p / WAVE_STEPS) * (LNA_MAX - LNA_MIN));
+        }
+
         var freqRange = document.getElementById('freqRange');
         var freqNum = document.getElementById('freqNum');
         var waveRange = document.getElementById('waveRange');
         var waveNum = document.getElementById('waveNum');
+        var antRange = document.getElementById('antRange');
+        var antNum = document.getElementById('antNum');
+        var antCaseLabel = document.getElementById('antCaseLabel');
         var panelFreq = document.getElementById('panelFreq');
         var lambdaOut = document.getElementById('lambdaOut');
+        var sizeWarning = document.getElementById('sizeWarning');
 
         function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
 
-        // não sobrescreve o campo de texto que o usuário está digitando
+        // não sobrescreve o campo de texto que o usuário está digitando,
+        // a menos que a atualização venha de um botão de step (forceUpdate)
         function setVal(el, str) {
-            if (el !== document.activeElement) el.value = str;
+            if (!forceUpdate && el === document.activeElement) return;
+            el.value = str;
         }
 
         // pt-BR: vírgula decimal
@@ -160,12 +226,19 @@
 
         function render() {
             var lambda = 300 / freq;             // m
+            var L = lambda * factor * 100;       // cm
+            // máximo recomendado para a fração = tamanho na menor frequência da faixa (1 MHz)
+            var recMax = antLenCm(FREQ_MIN, factor);
+            var over = L > recMax * 1.0005;      // equivale a frequência abaixo de 1 MHz
 
             freqRange.value = freq;
             setVal(freqNum, fmt(freq, 1));
             waveRange.value = lambdaToPos(lambda);
             setVal(waveNum, fmt(lambda, 2));
+            antRange.value = antToPos(L);        // só o nível muda; a escala é fixa
+            setVal(antNum, fmt(L, L < 10 ? 1 : 0));
 
+            antCaseLabel.textContent = '(' + CASE_NAMES[String(factor)] + ')';
             panelFreq.textContent = fmt(freq, 1);
             lambdaOut.textContent = fmtLen(lambda * 100);
 
@@ -173,11 +246,26 @@
                 document.getElementById('res-' + k).textContent =
                     fmtLen(antLenCm(freq, parseFloat(k)));
             });
+            document.querySelectorAll('.result-table tbody tr').forEach(function (tr) {
+                var sel = tr.getAttribute('data-factor') === String(factor);
+                tr.classList.toggle('is-selected-row', sel && !over);
+                tr.classList.toggle('is-over-row', sel && over);
+            });
+
+            if (over) {
+                sizeWarning.hidden = false;
+                sizeWarning.textContent = '⚠️ Tamanho acima do recomendado para '
+                    + CASE_NAMES[String(factor)] + ' (máx. ' + fmt(recMax, 0)
+                    + ' cm). A frequência fica abaixo de 1 MHz.';
+            } else {
+                sizeWarning.hidden = true;
+            }
         }
 
         function setFromFrequency(f) {
             if (!isFinite(f) || f <= 0) return;
-            freq = clamp(f, FREQ_MIN, FREQ_MAX);
+            // não fixa na faixa: permite ultrapassar o recomendado (vira alerta no render)
+            freq = clamp(f, 0.01, 100000);
             render();
         }
 
@@ -194,6 +282,79 @@
         });
         waveNum.addEventListener('input', function () {
             setFromFrequency(300 / parseFloat(waveNum.value.replace(',', '.')));
+        });
+
+        antRange.addEventListener('input', function () {
+            var L = posToAnt(parseFloat(antRange.value));
+            setFromFrequency(30000 * factor / L);
+        });
+        antNum.addEventListener('input', function () {
+            setFromFrequency(30000 * factor / parseFloat(antNum.value.replace(',', '.')));
+        });
+
+        // botões de incremento/decremento dos sliders
+        var STEP = { freq: 1, wave: 0.1, ant: 1 };   // passo por clique (MHz, m, cm)
+        function stepField(kind, dir) {
+            var d = dir * STEP[kind];
+            if (kind === 'freq') {
+                setFromFrequency(freq + d);
+            } else if (kind === 'wave') {
+                setFromFrequency(300 / (300 / freq + d));
+            } else { // ant
+                setFromFrequency(30000 * factor / ((300 / freq) * factor * 100 + d));
+            }
+        }
+        document.querySelectorAll('.step-btn').forEach(function (b) {
+            var kind = b.getAttribute('data-kind');
+            var dir = parseFloat(b.getAttribute('data-dir'));
+            var holdT, repT;
+            function start(e) {
+                e.preventDefault();
+                forceUpdate = true;
+                stepField(kind, dir);
+                forceUpdate = false;
+                holdT = setTimeout(function () {     // segurar = repetir
+                    repT = setInterval(function () {
+                        forceUpdate = true;
+                        stepField(kind, dir);
+                        forceUpdate = false;
+                    }, 80);
+                }, 350);
+            }
+            function stop() { clearTimeout(holdT); clearInterval(repT); }
+            b.addEventListener('pointerdown', start);
+            b.addEventListener('pointerup', stop);
+            b.addEventListener('pointerleave', stop);
+            b.addEventListener('pointercancel', stop);
+        });
+
+        // seletor de fração
+        document.getElementById('caseSelector').addEventListener('click', function (e) {
+            var btn = e.target.closest('.case-btn');
+            if (!btn) return;
+            // tamanho físico atual (cm) antes de mudar o fator
+            var oldL = (300 / freq) * factor * 100;
+            factor = parseFloat(btn.getAttribute('data-factor'));
+            document.querySelectorAll('.case-btn').forEach(function (b) {
+                b.classList.toggle('is-active', b === btn);
+            });
+            if (changeMode === 'wave') {
+                // mantém o tamanho da antena → recalcula frequência/onda
+                setFromFrequency(30000 * factor / oldL);
+            } else {
+                // mantém a frequência → reescala o tamanho da antena
+                render();
+            }
+        });
+
+        // toggle: o que recalcular ao trocar a fração
+        document.getElementById('modeToggle').addEventListener('click', function (e) {
+            var btn = e.target.closest('.mode-btn');
+            if (!btn) return;
+            changeMode = btn.getAttribute('data-mode');
+            document.querySelectorAll('.mode-btn').forEach(function (b) {
+                b.classList.toggle('is-active', b === btn);
+            });
         });
 
         // ── Animação da onda ──
