@@ -1,10 +1,12 @@
 from flask import Flask, render_template, jsonify, request
+from werkzeug.middleware.proxy_fix import ProxyFix
 import json
 import random
 import sqlite3
 from datetime import datetime, timezone
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_prefix=1)
 QUESTIONS = []
 DB_PATH = 'logs.db'
 
