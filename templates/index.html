@@ -42,13 +42,13 @@
         <div class="content">
             <p class="has-text-centered has-text-weight-semibold">Selecione uma prova para praticar:</p>
             <div class="buttons is-centered is-flex-direction-column">
-                <button onclick="iniciarProva('/prova-operacional')" class="button is-primary is-medium">
+                <button onclick="iniciarProva('{{ url_for('prova_operacional') }}')" class="button is-primary is-medium">
                     Técnica e Ética Operacional
                 </button>
-                <button onclick="iniciarProva('/prova-legislacao')" class="button is-primary is-medium">
+                <button onclick="iniciarProva('{{ url_for('prova_legislacao') }}')" class="button is-primary is-medium">
                     Legislação de Telecomunicações
                 </button>
-                <button onclick="iniciarProva('/prova-eletronica')" class="button is-primary is-medium">
+                <button onclick="iniciarProva('{{ url_for('prova_eletrica') }}')" class="button is-primary is-medium">
                     Eletrônica e Eletricidade
                 </button>
             </div>
@@ -57,7 +57,7 @@
         <div class="content">
             <p class="has-text-centered has-text-weight-semibold">Entenda o processo para obter o COER:</p>
             <div class="buttons is-centered">
-                <button onclick="window.location.href='/instrucoes'" class="button is-primary is-medium">
+                <button onclick="window.location.href='{{ url_for('instrucoes') }}'" class="button is-primary is-medium">
                     Como obter o COER?
                 </button>
             </div>
@@ -66,7 +66,7 @@
         <div class="content">
             <p class="has-text-centered has-text-weight-semibold">Ferramentas:</p>
             <div class="buttons is-centered">
-                <button onclick="window.location.href='/calculadora-antenas'" class="button is-primary is-medium">
+                <button onclick="window.location.href='{{ url_for('calculadora_antenas') }}'" class="button is-primary is-medium">
                     Calculadora de Antenas
                 </button>
             </div>

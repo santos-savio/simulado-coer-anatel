@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const APP_ROOT = window.APP_ROOT || '';
   let questions = [];
   let current = 0;
   let score = 0;
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressBar = document.getElementById('progressBar');
 
   // Carrega perguntas
-  fetch('/api/questions')
+  fetch(`${APP_ROOT}/api/questions`)
     .then(res => {
       if (!res.ok) throw new Error("Falha ao carregar questões.");
       return res.json();
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function logAcesso(payload) {
     if (logEnviado) return;
     logEnviado = true;
-    navigator.sendBeacon('/api/log-acesso', new Blob(
+    navigator.sendBeacon(`${APP_ROOT}/api/log-acesso`, new Blob(
       [JSON.stringify({ prova: window.PROVA_NOME || '', ...payload })],
       { type: 'application/json' }
     ));
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p><strong>Acertos:</strong> ${score} de ${questions.length}</p>
         <p><strong>Nota:</strong> ${(score / questions.length * 10).toFixed(2)}</p>
         <button class="button is-warning mt-4" onclick="window.location.reload()">Reiniciar</button>
-        <button class="button is-warning mt-4" onclick="window.location.href = '/'">Voltar para o início</button>
+        <button class="button is-warning mt-4" onclick="window.location.href = (window.APP_ROOT || '') + '/'">Voltar para o início</button>
         <p> <button class="button is-info mt-4" onclick="mostrarCorrecao()">Ver correção</button> </p>
         <div id="correcao"></div> <!-- Adicione este elemento -->
       </div>

@@ -37,8 +37,11 @@
             <button id="nextBtn" class="button is-link is-fullwidth">Próxima</button>
         </div>
 
-        <script>window.PROVA_NOME = "{{ prova_nome }}";</script>
-        <script src="/static/script.js"></script>
+        <script>
+            window.PROVA_NOME = "{{ prova_nome }}";
+            window.APP_ROOT = "{{ request.script_root }}";
+        </script>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
     </div>
 
     <!-- Modal de confirmação para sair da prova -->
